@@ -4,6 +4,8 @@ import string
 from nltk.corpus import stopwords
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+import pickle
 
 # Get absolute path to project root.
 base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -85,4 +87,17 @@ vectorizer = TfidfVectorizer()
 # learns all unique words and converts text into numbers.
 x = vectorizer.fit_transform(df['text']) # input(text as numbers).
 y = df['labels'] # output(spam/ham).
+# Train-Test-Split
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+# X_train is data used to train model
+# X_test is data used to test model
+# y_train is labels for training
+# y_test is labels for testin
+
+# SAVE VECTORIZER(pickle file):
+model_dir = os.path.join(base_dir, "backend", "models")
+save_path = os.path.join(model_dir, "vectorizer.pkl")
+
+with open(save_path, "wb") as f:
+    pickle.dump(vectorizer, f)
 
